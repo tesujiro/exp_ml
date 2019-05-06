@@ -93,7 +93,7 @@ func evaluate(c *Classifier) error {
 			os.Exit(1)
 		}
 		probs, likely, _ := c.ProbScores(LEARN_DATA)
-		if correct != likely+1 {
+		if correct != likely+1 || correct != 2 {
 			fmt.Printf("name=%v\tprobs=%8.8f\tlikely=%8.8d\n", NAME, probs, likely)
 			wrong++
 		} else {
