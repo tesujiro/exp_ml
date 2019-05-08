@@ -65,6 +65,17 @@ random_name()
     }'
 }
 
+if [ "$1" == "test" ]; then
+    cat <<EOF
+::つのだ☆ひろ:3
+::子門前太郎:3
+::小宮山和太郎:3
+::斉藤禿頭:2
+::齋藤禿頭:2
+EOF
+    exit 0
+fi
+
 unzip -qq ${INFILE}.zip 
 conv $INFILE | format | random_name $REPEAT
 rm $INFILE
