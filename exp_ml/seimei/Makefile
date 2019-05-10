@@ -17,3 +17,6 @@ clcnn_test:
 	./random_name.sh test > ./eval.txt
 	python clcnn_predict.py
 
+k2tf:
+	python keras_to_tensorflow.py ./model.h5
+
