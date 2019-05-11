@@ -11,6 +11,11 @@ import tensorflow as tf
 model = tf.keras.models.load_model('./model.h5')
 export_path = './tensorflow_model'
 
+if __name__ == "__main__":
+    # print input & outputs name as operation names
+    print('model.input={}'.format(model.input))
+    print('model.outputs={}'.format(model.outputs))
+
 with tf.keras.backend.get_session() as sess:
     tf.saved_model.simple_save(
         sess,
