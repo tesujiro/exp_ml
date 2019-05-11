@@ -6,8 +6,10 @@ from keras.models import load_model, Model
 from keras.layers import Input, Dense, Embedding, Reshape, Conv2D, MaxPooling2D, concatenate, BatchNormalization, Dropout
 from keras.optimizers import Adam
 from keras.callbacks import LearningRateScheduler
+#import tensorflow as tf
 
-def create_model(embed_size=256, max_length=10, filter_sizes=(2, 3, 4, 5), filter_num=64):
+def create_model(embed_size=16, max_length=10, filter_sizes=(2, 3), filter_num=64):
+    #inp = Input(shape=(max_length,),dtype=tf.int32)
     inp = Input(shape=(max_length,))
     emb = Embedding(0xffff, embed_size)(inp)
     emb_ex = Reshape((max_length, embed_size, 1))(emb)

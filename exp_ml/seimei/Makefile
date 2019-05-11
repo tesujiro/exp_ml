@@ -13,10 +13,16 @@ clcnn_predict:
 	./random_name.sh 10000 > ./eval.txt
 	python clcnn_predict.py
 
+clcnn_go:
+	./random_name.sh 10000 > ./eval.txt
+	go run clcnn_predict.go
+
 clcnn_test:
 	./random_name.sh test > ./eval.txt
 	python clcnn_predict.py
 
 k2tf:
+	rm -r ./tensorflow_model
 	python keras_to_tensorflow.py ./model.h5
+
 
