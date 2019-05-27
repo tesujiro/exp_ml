@@ -30,8 +30,9 @@ def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5,
     out1 = Dense(MAX_LENGTH, activation='sigmoid', name='out1')(do1)
     out2 = Dense(MAX_LENGTH, activation='sigmoid', name='out2')(do1)
     out3 = Dense(MAX_LENGTH, activation='sigmoid', name='out3')(do1)
-    model = Model(input=inp, output=out1)
-    #model = Model(input=inp, outputs=[out1,out2,out3])
+    #model = Model(input=inp, outputs=[out1])
+    #model = Model(input=inp, outputs=[out1,out2])
+    model = Model(input=inp, outputs=[out1,out2,out3])
     return model
 
 def load_data(filepath, max_length=MAX_LENGTH):
@@ -67,8 +68,12 @@ def train(inputs, targets1, targets2, targets3, batch_size=100, epoch_count=100,
                   optimizer=optimizer,
                   metrics=['accuracy'])
 
+    #print('targets1=',targets1.shape)
+    #print('targets2=',targets2.shape)
+    #print('targets3=',targets3.shape)
     model.fit(inputs,
-              {'out1': targets1, 'out2': targets2, 'out3': targets3},
+              #{'out1': targets1, 'out2': targets2, 'out3': targets3},
+              [targets1, targets2, targets3],
               epochs=epoch_count,
               batch_size=batch_size,
               verbose=1,
@@ -101,4 +106,4 @@ if __name__ == "__main__":
     print(target_values1.shape)
     print(target_values2.shape)
     print(target_values3.shape)
-    train(input_values, target_values1, target_value2, target_values3, epoch_count=50)
+    train(input_values, target_values1, target_values2, target_values3, epoch_count=50)
