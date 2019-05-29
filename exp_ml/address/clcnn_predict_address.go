@@ -61,7 +61,8 @@ func main() {
 	output1 := output[0].Value().([][]float32)
 	output2 := output[1].Value().([][]float32)
 	output3 := output[2].Value().([][]float32)
-	var right, wrong int
+	var right1, right2, right3 int
+	var wrong1, wrong2, wrong3 int
 	for i, _ := range output1 {
 		expected1 := int(correct_1[i])
 		expected2 := int(correct_2[i])
@@ -70,20 +71,35 @@ func main() {
 		actual1 := argmax(output1[i]) + 1
 		actual2 := argmax(output2[i]) + 1
 		actual3 := argmax(output3[i]) + 1
-		if expected1 == actual1 && expected2 == actual2 && expected3 == actual3 {
-			right++
+		if expected1 == actual1 {
+			right1++
 		} else {
-			wrong++
+			wrong1++
+		}
+		if expected2 == actual2 {
+			right2++
+		} else {
+			wrong2++
+		}
+		if expected3 == actual3 {
+			right3++
+		} else {
+			wrong3++
+		}
+		if expected1 == actual1 && expected2 == actual2 && expected3 == actual3 {
+		} else {
 			if actual1 <= actual2 && actual2 <= actual3 {
 				addr := []rune(code2name(address[i]))
 				fmt.Printf("%v|%v|%v|%v\n", string(addr[0:actual1]), string(addr[actual1:actual2]), string(addr[actual2:actual3]), string(addr[actual3:]))
-				//fmt.Printf("name=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2name(address[i]), actual1, actual2, actual3)
+				//fmt.Printf("address=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2name(address[i]), actual1, actual2, actual3)
 			} else {
-				fmt.Printf("name=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2name(address[i]), actual1, actual2, actual3)
+				fmt.Printf("address=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2name(address[i]), actual1, actual2, actual3)
 			}
 		}
 	}
-	fmt.Printf("right: %v\twrong: %v\tratio: %v%%\n", right, wrong, float32(right*100)/float32(right+wrong))
+	fmt.Printf("都道府県\tright: %v\twrong: %v\tratio: %v%%\n", right1, wrong1, float32(right1*100)/float32(right1+wrong1))
+	fmt.Printf("市区町村\tright: %v\twrong: %v\tratio: %v%%\n", right2, wrong2, float32(right2*100)/float32(right2+wrong2))
+	fmt.Printf("町域　　\tright: %v\twrong: %v\tratio: %v%%\n", right3, wrong3, float32(right3*100)/float32(right3+wrong3))
 }
 
 func code2name(code []float32) string {

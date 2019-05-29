@@ -10,7 +10,7 @@ from keras.callbacks import LearningRateScheduler
 
 MAX_LENGTH=30
 
-def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5, 6), filter_num=64):
+def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5), filter_num=96):
     #inp = Input(shape=(max_length,),dtype=tf.int32)
     inp = Input(shape=(max_length,))
     emb = Embedding(0xffff, embed_size)(inp)
@@ -28,7 +28,11 @@ def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5,
     bn1 = BatchNormalization()(fc1)
     do1 = Dropout(0.5)(bn1)
     out1 = Dense(MAX_LENGTH, activation='sigmoid', name='out1')(do1)
+    bn2 = BatchNormalization()(do1)
+    do2 = Dropout(0.5)(bn2)
     out2 = Dense(MAX_LENGTH, activation='sigmoid', name='out2')(do1)
+    bn3 = BatchNormalization()(do2)
+    do3 = Dropout(0.5)(bn3)
     out3 = Dense(MAX_LENGTH, activation='sigmoid', name='out3')(do1)
     #model = Model(input=inp, outputs=[out1])
     #model = Model(input=inp, outputs=[out1,out2])
