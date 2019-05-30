@@ -89,11 +89,11 @@ func main() {
 		if expected1 == actual1 && expected2 == actual2 && expected3 == actual3 {
 		} else {
 			if actual1 <= actual2 && actual2 <= actual3 {
-				addr := []rune(code2name(address[i]))
+				addr := []rune(code2address(address[i]))
 				fmt.Printf("%v|%v|%v|%v\n", string(addr[0:actual1]), string(addr[actual1:actual2]), string(addr[actual2:actual3]), string(addr[actual3:]))
-				//fmt.Printf("address=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2name(address[i]), actual1, actual2, actual3)
+				//fmt.Printf("address=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2address(address[i]), actual1, actual2, actual3)
 			} else {
-				fmt.Printf("address=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2name(address[i]), actual1, actual2, actual3)
+				fmt.Printf("address=%v\tactual1=%v\tactual2=%v\tactual3=%v\n", code2address(address[i]), actual1, actual2, actual3)
 			}
 		}
 	}
@@ -102,12 +102,12 @@ func main() {
 	fmt.Printf("町域　　\tright: %v\twrong: %v\tratio: %v%%\n", right3, wrong3, float32(right3*100)/float32(right3+wrong3))
 }
 
-func code2name(code []float32) string {
-	var name string
+func code2address(code []float32) string {
+	var address string
 	for _, ch := range code {
-		name = fmt.Sprintf("%s%c", name, int(ch))
+		address = fmt.Sprintf("%s%c", address, int(ch))
 	}
-	return name
+	return address
 }
 
 func argmax(args []float32) int {
@@ -122,7 +122,7 @@ func argmax(args []float32) int {
 	return index
 }
 
-// load func returns name data and divide numbers.
+// load func returns address data and divide numbers.
 func load(path string) ([][]float32, []float32, []float32, []float32, error) {
 
 	file, err := os.Open(path)
@@ -132,7 +132,7 @@ func load(path string) ([][]float32, []float32, []float32, []float32, error) {
 	defer file.Close()
 
 	// input file format:
-	// surname:givenname:fullname:divide numer
+	// address:len(prefecture):len(city):len(town)
 	// 徳島県徳島市新浜町:3:6:9
 	r := csv.NewReader(file)
 	r.Comma = ':'
@@ -151,9 +151,9 @@ func load(path string) ([][]float32, []float32, []float32, []float32, error) {
 		}
 
 		address := record[0]
-		div1 := record[1]
-		div2 := record[2]
-		div3 := record[3]
+		len1 := record[1]
+		len2 := record[2]
+		len3 := record[3]
 
 		slice := []float32{}
 		// address: string -> []float32
@@ -165,21 +165,21 @@ func load(path string) ([][]float32, []float32, []float32, []float32, error) {
 		}
 		address_data = append(address_data, slice)
 
-		correct1, err := strconv.ParseFloat(div1, 32)
+		correct1, err := strconv.ParseFloat(len1, 32)
 		if err != nil {
 			fmt.Printf("Number conversion error:%v", err)
 			os.Exit(1)
 		}
 		correct_data1 = append(correct_data1, float32(correct1))
 
-		correct2, err := strconv.ParseFloat(div2, 32)
+		correct2, err := strconv.ParseFloat(len2, 32)
 		if err != nil {
 			fmt.Printf("Number conversion error:%v", err)
 			os.Exit(1)
 		}
 		correct_data2 = append(correct_data2, float32(correct2))
 
-		correct3, err := strconv.ParseFloat(div3, 32)
+		correct3, err := strconv.ParseFloat(len3, 32)
 		if err != nil {
 			fmt.Printf("Number conversion error:%v", err)
 			os.Exit(1)
