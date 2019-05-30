@@ -10,7 +10,7 @@ from keras.callbacks import LearningRateScheduler
 
 MAX_LENGTH=30
 
-def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5), filter_num=96):
+def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5), filter_num=64):
     #inp = Input(shape=(max_length,),dtype=tf.int32)
     inp = Input(shape=(max_length,))
     emb = Embedding(0xffff, embed_size)(inp)
@@ -28,12 +28,14 @@ def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5)
     bn1 = BatchNormalization()(fc1)
     do1 = Dropout(0.5)(bn1)
     out1 = Dense(MAX_LENGTH, activation='sigmoid', name='out1')(do1)
-    bn2 = BatchNormalization()(do1)
+    fc2 = Dense(64, activation="relu")(reshape)
+    bn2 = BatchNormalization()(fc2)
     do2 = Dropout(0.5)(bn2)
-    out2 = Dense(MAX_LENGTH, activation='sigmoid', name='out2')(do1)
-    bn3 = BatchNormalization()(do2)
+    out2 = Dense(MAX_LENGTH, activation='sigmoid', name='out2')(do2)
+    fc3 = Dense(64, activation="relu")(reshape)
+    bn3 = BatchNormalization()(fc3)
     do3 = Dropout(0.5)(bn3)
-    out3 = Dense(MAX_LENGTH, activation='sigmoid', name='out3')(do1)
+    out3 = Dense(MAX_LENGTH, activation='sigmoid', name='out3')(do3)
     #model = Model(input=inp, outputs=[out1])
     #model = Model(input=inp, outputs=[out1,out2])
     model = Model(input=inp, outputs=[out1,out2,out3])
@@ -58,7 +60,7 @@ def load_data(filepath, max_length=MAX_LENGTH):
             l.append((pref, city, town, address))
     return l
 
-def train(inputs, targets1, targets2, targets3, batch_size=100, epoch_count=100, max_length=MAX_LENGTH, model_filepath="./model.h5", learning_rate=0.001):
+def train(inputs, targets1, targets2, targets3, batch_size=30, epoch_count=100, max_length=MAX_LENGTH, model_filepath="./model.h5", learning_rate=0.001):
 
     # gradually decrease the learning rate
     start = learning_rate
@@ -110,4 +112,4 @@ if __name__ == "__main__":
     print(target_values1.shape)
     print(target_values2.shape)
     print(target_values3.shape)
-    train(input_values, target_values1, target_values2, target_values3, epoch_count=50)
+    train(input_values, target_values1, target_values2, target_values3, epoch_count=30)
