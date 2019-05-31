@@ -10,7 +10,7 @@ from keras.callbacks import LearningRateScheduler
 
 MAX_LENGTH=30
 
-def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5), filter_num=64):
+def create_model(embed_size=64, max_length=MAX_LENGTH, filter_sizes=(2, 3, 4, 5, 6), filter_num=128):
     #inp = Input(shape=(max_length,),dtype=tf.int32)
     inp = Input(shape=(max_length,))
     emb = Embedding(0xffff, embed_size)(inp)
@@ -60,7 +60,7 @@ def load_data(filepath, max_length=MAX_LENGTH):
             l.append((pref, city, town, address))
     return l
 
-def train(inputs, targets1, targets2, targets3, batch_size=30, epoch_count=100, max_length=MAX_LENGTH, model_filepath="./model.h5", learning_rate=0.001):
+def train(inputs, targets1, targets2, targets3, batch_size=30, epoch_count=100, max_length=MAX_LENGTH, model_filepath="./model.h5", learning_rate=0.0009):
 
     # gradually decrease the learning rate
     start = learning_rate
